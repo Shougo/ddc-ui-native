@@ -69,7 +69,7 @@ export class Ui extends BaseUi<Params> {
 
         if (args.context.input.endsWith(found[1])) {
           // Skip completion and reindent if matched.
-          await fn.feedkeys(args.denops, "\\<C-f>", "n");
+          await fn.feedkeys(args.denops, "\<C-f>", "n");
           return;
         }
       }
