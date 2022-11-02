@@ -60,6 +60,7 @@ export class Ui extends BaseUi<Params> {
       mode == "i" &&
       indentkeys.filter((pattern) => pattern == "!^F").length > 0
     ) {
+      const checkInput = args.context.input.replace(/^\s+/, '');
       for (
         const found of indentkeys.map((p) => p.match(/^0?=~?(.+)$/))
       ) {
@@ -67,9 +68,15 @@ export class Ui extends BaseUi<Params> {
           continue;
         }
 
-        if (args.context.input.endsWith(found[1])) {
-          // Skip completion and reindent if matched.
-          await fn.feedkeys(args.denops, "\<C-f>", "n");
+        // Skip completion and reindent if matched.
+        // NOTE: fn.feedkeys(args.denops, "\<C-f>", "n") does not work
+        const checkHead = found[0][0] == '0';
+        if (checkHead && checkInput == found[1]) {
+          await args.denops.call("ddc#ui#native#_indent_current_line");
+          return;
+        }
+        if (!checkHead && checkInput.endsWith(found[1])) {
+          await args.denops.call("ddc#ui#native#_indent_current_line");
           return;
         }
       }

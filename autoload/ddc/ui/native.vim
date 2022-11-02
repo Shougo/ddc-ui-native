@@ -27,6 +27,10 @@ function! ddc#ui#native#_on_complete_done() abort
         \ let g:ddc#ui#native#_skip_complete = v:false
 endfunction
 
+function! ddc#ui#native#_indent_current_line() abort
+  call feedkeys("\<C-f>", 'n')
+endfunction
+
 function! s:complete(overwrite, pos, items) abort
   if mode() !=# 'i'
     return
