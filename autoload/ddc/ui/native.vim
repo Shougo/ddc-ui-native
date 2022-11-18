@@ -6,9 +6,8 @@ function! ddc#ui#native#_show(overwrite, pos, items) abort
     if exists('s:completion_timer')
       call timer_stop(s:completion_timer)
     endif
-    let s:completion_timer = timer_start(10,
-          \ { -> s:complete(a:overwrite, a:pos, a:items) }
-          \ )
+    let s:completion_timer = timer_start(
+          \ 10, { -> s:complete(a:overwrite, a:pos, a:items) })
   endif
 endfunction
 
