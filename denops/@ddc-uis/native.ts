@@ -17,7 +17,7 @@ export type Params = {
 };
 
 export class Ui extends BaseUi<Params> {
-  async onInit(args: {
+  override async onInit(args: {
     denops: Denops;
   }) {
     await autocmd.group(
@@ -33,7 +33,7 @@ export class Ui extends BaseUi<Params> {
     );
   }
 
-  async skipCompletion(args: {
+  override async skipCompletion(args: {
     denops: Denops;
   }): Promise<boolean> {
     // Check for CompleteDone
@@ -44,7 +44,7 @@ export class Ui extends BaseUi<Params> {
     ) as boolean;
   }
 
-  async show(args: {
+  override async show(args: {
     denops: Denops;
     context: Context;
     options: DdcOptions;
@@ -90,13 +90,13 @@ export class Ui extends BaseUi<Params> {
     );
   }
 
-  async hide(args: {
+  override async hide(args: {
     denops: Denops;
   }): Promise<void> {
     await args.denops.call("ddc#ui#native#_hide");
   }
 
-  params(): Params {
+  override params(): Params {
     return {
       overwriteCompleteopt: true,
     };
