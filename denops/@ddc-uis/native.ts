@@ -2,15 +2,15 @@ import {
   Context,
   DdcItem,
   DdcOptions,
-} from "https://deno.land/x/ddc_vim@v3.3.0/types.ts";
-import { BaseUi } from "https://deno.land/x/ddc_vim@v3.3.0/base/ui.ts";
+} from "https://deno.land/x/ddc_vim@v3.4.0/types.ts";
+import { BaseUi } from "https://deno.land/x/ddc_vim@v3.4.0/base/ui.ts";
 import {
   autocmd,
   Denops,
   fn,
   op,
   vars,
-} from "https://deno.land/x/ddc_vim@v3.3.0/deps.ts";
+} from "https://deno.land/x/ddc_vim@v3.4.0/deps.ts";
 
 export type Params = {
   overwriteCompleteopt: boolean;
@@ -94,6 +94,12 @@ export class Ui extends BaseUi<Params> {
     denops: Denops;
   }): Promise<void> {
     await args.denops.call("ddc#ui#native#_hide");
+  }
+
+  override async visible(args: {
+    denops: Denops;
+  }): Promise<boolean> {
+    return await fn.pumvisible(args.denops);
   }
 
   override params(): Params {
