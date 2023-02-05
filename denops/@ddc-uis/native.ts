@@ -13,6 +13,7 @@ import {
 } from "https://deno.land/x/ddc_vim@v3.4.0/deps.ts";
 
 export type Params = {
+  insert: boolean;
   overwriteCompleteopt: boolean;
 };
 
@@ -60,7 +61,7 @@ export class Ui extends BaseUi<Params> {
       mode == "i" &&
       indentkeys.filter((pattern) => pattern == "!^F").length > 0
     ) {
-      const checkInput = args.context.input.replace(/^\s+/, '');
+      const checkInput = args.context.input.replace(/^\s+/, "");
       for (
         const found of indentkeys.map((p) => p.match(/^0?=~?(.+)$/))
       ) {
@@ -70,7 +71,7 @@ export class Ui extends BaseUi<Params> {
 
         // Skip completion and reindent if matched.
         // NOTE: fn.feedkeys(args.denops, "\<C-f>", "n") does not work
-        const checkHead = found[0][0] == '0';
+        const checkHead = found[0][0] == "0";
         if (checkHead && checkInput == found[1]) {
           await args.denops.call("ddc#ui#native#_indent_current_line");
           return;
@@ -85,6 +86,7 @@ export class Ui extends BaseUi<Params> {
     await args.denops.call(
       "ddc#ui#native#_show",
       args.context.event != "Manual" && args.uiParams.overwriteCompleteopt,
+      args.uiParams.insert,
       args.completePos,
       args.items,
     );
@@ -99,11 +101,12 @@ export class Ui extends BaseUi<Params> {
   override async visible(args: {
     denops: Denops;
   }): Promise<boolean> {
-    return await fn.pumvisible(args.denops);
+    return await fn.pumvisible(args.denops) as boolean;
   }
 
   override params(): Params {
     return {
+      insert: false,
       overwriteCompleteopt: true,
     };
   }

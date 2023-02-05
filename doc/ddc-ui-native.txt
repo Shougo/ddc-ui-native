@@ -36,6 +36,14 @@ EXAMPLES					*ddc-ui-native-examples*
 ==============================================================================
 PARAMS							*ddc-ui-native-params*
 
+				    	    	*ddc-ui-pum-native-insert*
+insert		(boolean)
+		Insert the first item automatically.
+		It is useful for manual completion.
+		Note: It changes 'completeopt' automatically.
+
+		Default: v:false
+
 				*ddc-ui-native-param-overwriteCompleteopt*
 overwriteCompleteopt	(boolean)
 		If it is enabled, ddc.vim overwrites 'completeopt'
@@ -43,7 +51,7 @@ overwriteCompleteopt	(boolean)
 		Note: If you disable the feature, you need to change
 		'completeopt' manually.
 
-		Default: true
+		Default: v:true
 
 
 ==============================================================================

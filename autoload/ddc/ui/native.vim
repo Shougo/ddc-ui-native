@@ -1,13 +1,13 @@
-function! ddc#ui#native#_show(overwrite, pos, items) abort
+function! ddc#ui#native#_show(overwrite, insert, pos, items) abort
   if has('nvim')
-    call s:complete(a:overwrite, a:pos, a:items)
+    call s:complete(a:overwrite, a:insert, a:pos, a:items)
   else
     " Debounce for Vim8
     if exists('s:completion_timer')
       call timer_stop(s:completion_timer)
     endif
     let s:completion_timer = timer_start(
-          \ 10, { -> s:complete(a:overwrite, a:pos, a:items) })
+          \ 10, { -> s:complete(a:overwrite, a:insert, a:pos, a:items) })
   endif
 endfunction
 
@@ -32,13 +32,22 @@ function! ddc#ui#native#_indent_current_line() abort
   call feedkeys("\<C-f>", 'n')
 endfunction
 
-function! s:complete(overwrite, pos, items) abort
+function! s:complete(overwrite, insert, pos, items) abort
   if mode() !=# 'i'
     return
   endif
 
+  if !exists('s:save_completeopt')
+    let s:save_completeopt = &completeopt
+  endif
+
   if a:overwrite
     call s:overwrite_completeopt()
+  endif
+
+  if a:insert
+    set completeopt-=noinsert
+    set completeopt-=noselect
   endif
 
   " Note: It may be called in map-<expr>
@@ -46,10 +55,6 @@ function! s:complete(overwrite, pos, items) abort
 endfunction
 
 function! s:overwrite_completeopt() abort
-  if !exists('s:save_completeopt')
-    let s:save_completeopt = &completeopt
-  endif
-
   " Auto completion conflicts with 'completeopt'.
   set completeopt-=longest
   set completeopt+=menuone
