@@ -3,7 +3,7 @@ function! ddc#ui#native#_show(overwrite, insert, pos, items) abort
     call s:complete(a:overwrite, a:insert, a:pos, a:items)
   else
     " Debounce for Vim8
-    if exists('s:completion_timer')
+    if 's:completion_timer'->exists()
       call timer_stop(s:completion_timer)
     endif
     let s:completion_timer = timer_start(
@@ -40,7 +40,7 @@ function! s:complete(overwrite, insert, pos, items) abort
   " NOTE: Disable completion messages
   set shortmess+=c
 
-  if !exists('s:save_completeopt')
+  if !('s:save_completeopt'->exists())
     let s:save_completeopt = &completeopt
   endif
 
@@ -70,7 +70,7 @@ function! s:overwrite_completeopt() abort
 endfunction
 
 function! s:restore_completeopt() abort
-  if exists('s:save_completeopt')
+  if 's:save_completeopt'->exists()
     " Restore completeopt
     let &completeopt = s:save_completeopt
     unlet s:save_completeopt
