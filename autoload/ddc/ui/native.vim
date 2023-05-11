@@ -1,6 +1,7 @@
 function! ddc#ui#native#_show(overwrite, insert, pos, items) abort
   " NOTE: Skip if item is selected
-  if complete_info().selected > 0
+  const selected = complete_info().selected
+  if selected > 0 || (&completeopt !~# 'noinsert' && selected == 0)
     return
   endif
 
