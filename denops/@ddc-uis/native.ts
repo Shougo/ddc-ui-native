@@ -85,6 +85,7 @@ export class Ui extends BaseUi<Params> {
 
     await args.denops.call(
       "ddc#ui#native#_show",
+      args.context.event,
       args.context.event != "Manual" && args.uiParams.overwriteCompleteopt,
       args.uiParams.insert,
       args.completePos,
