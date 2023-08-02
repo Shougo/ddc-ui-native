@@ -2,15 +2,15 @@ import {
   Context,
   DdcItem,
   DdcOptions,
-} from "https://deno.land/x/ddc_vim@v3.9.1/types.ts";
-import { BaseUi } from "https://deno.land/x/ddc_vim@v3.9.1/base/ui.ts";
+} from "https://deno.land/x/ddc_vim@v3.9.2/types.ts";
+import { BaseUi } from "https://deno.land/x/ddc_vim@v3.9.2/base/ui.ts";
 import {
   autocmd,
   Denops,
   fn,
   op,
   vars,
-} from "https://deno.land/x/ddc_vim@v3.9.1/deps.ts";
+} from "https://deno.land/x/ddc_vim@v3.9.2/deps.ts";
 
 export type Params = {
   insert: boolean;
@@ -83,13 +83,23 @@ export class Ui extends BaseUi<Params> {
       }
     }
 
+    // Convert to native items
+    const items = args.items.map((item) => (
+      {
+        ...item,
+        dup: true,
+        equal: true,
+        icase: true,
+      }
+    ));
+
     await args.denops.call(
       "ddc#ui#native#_show",
       args.context.event,
       args.context.event != "Manual" && args.uiParams.overwriteCompleteopt,
       args.uiParams.insert,
       args.completePos,
-      args.items,
+      items,
     );
   }
 
