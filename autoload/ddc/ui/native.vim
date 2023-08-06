@@ -33,11 +33,6 @@ function ddc#ui#native#_on_complete_done() abort
         \ let g:ddc#ui#native#_skip_complete = v:false
 
   call ddc#on_complete_done(v:completed_item)
-
-  if !(v:completed_item->empty()) && v:completed_item.word !=# ''
-    " NOTE: When manual Ctrl-X mode, it may be empty text
-    call ddc#hide()
-  endif
 endfunction
 
 function ddc#ui#native#_indent_current_line() abort
