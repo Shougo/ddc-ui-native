@@ -34,7 +34,8 @@ function ddc#ui#native#_on_complete_done() abort
 
   call ddc#on_complete_done(v:completed_item)
 
-  if !(v:completed_item->empty())
+  if !(v:completed_item->empty()) && v:completed_item.word !=# ''
+    " NOTE: When manual Ctrl-X mode, it may be empty text
     call ddc#hide()
   endif
 endfunction
