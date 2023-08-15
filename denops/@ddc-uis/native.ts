@@ -2,15 +2,16 @@ import {
   Context,
   DdcItem,
   DdcOptions,
-} from "https://deno.land/x/ddc_vim@v4.0.2/types.ts";
-import { BaseUi } from "https://deno.land/x/ddc_vim@v4.0.2/base/ui.ts";
+} from "https://deno.land/x/ddc_vim@v4.0.4/types.ts";
+import { BaseUi } from "https://deno.land/x/ddc_vim@v4.0.4/base/ui.ts";
 import {
   autocmd,
   Denops,
   fn,
+  is,
   op,
   vars,
-} from "https://deno.land/x/ddc_vim@v4.0.2/deps.ts";
+} from "https://deno.land/x/ddc_vim@v4.0.4/deps.ts";
 
 export type Params = {
   insert: boolean;
@@ -84,14 +85,28 @@ export class Ui extends BaseUi<Params> {
     }
 
     // Convert to native items
-    const items = args.items.map((item) => (
-      {
+    const items = args.items.map((item) => {
+      const ret = {
         ...item,
         dup: true,
         equal: true,
         icase: true,
+      };
+
+      // NOTE: Set __sourceName in "user_data".
+      if (is.Record(ret.user_data)) {
+        ret.user_data = {
+          ...ret.user_data,
+          __sourceName: item.__sourceName,
+        };
+      } else if (!ret.user_data) {
+        ret.user_data = {
+          __sourceName: item.__sourceName,
+        };
       }
-    ));
+
+      return ret;
+    });
 
     await args.denops.call(
       "ddc#ui#native#_show",
