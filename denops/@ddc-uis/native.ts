@@ -53,6 +53,11 @@ export class Ui extends BaseUi<Params> {
     items: DdcItem[];
     uiParams: Params;
   }): Promise<void> {
+    // Check modifiable.
+    if (!await op.modifiable.getLocal(args.denops)) {
+      return;
+    }
+
     // Check indentkeys.
     // Note: re-indentation does not work for native popupmenu
     const indentkeys = (await op.indentkeys.getLocal(args.denops)).split(",");
