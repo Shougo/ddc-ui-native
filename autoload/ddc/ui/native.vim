@@ -47,7 +47,7 @@ function s:complete(overwrite, insert, pos, items) abort
   " NOTE: Disable completion messages
   set shortmess+=c
 
-  if !('s:save_completeopt'->exists())
+  if !'s:save_completeopt'->exists()
     let s:save_completeopt = &completeopt
   endif
 
