@@ -2,7 +2,8 @@ function ddc#ui#native#_show(event, overwrite, insert, pos, items) abort
   " NOTE: Skip if item is selected
   const selected = complete_info().selected
   if a:event ==# 'Update'
-        \ && (selected > 0 || (&completeopt !~# 'noinsert' && selected == 0))
+        \ && (selected > 0
+        \     || (&l:completeopt !~# 'noinsert' && selected == 0))
     return
   endif
 
@@ -48,7 +49,7 @@ function s:complete(overwrite, insert, pos, items) abort
   set shortmess+=c
 
   if !'s:save_completeopt'->exists()
-    let s:save_completeopt = &completeopt
+    let s:save_completeopt = &l:completeopt
   endif
 
   if a:overwrite
@@ -56,8 +57,8 @@ function s:complete(overwrite, insert, pos, items) abort
   endif
 
   if a:insert
-    set completeopt-=noinsert
-    set completeopt-=noselect
+    setlocal completeopt-=noinsert
+    setlocal completeopt-=noselect
   endif
 
   " Note: It may be called in map-<expr>
@@ -66,20 +67,20 @@ endfunction
 
 function s:overwrite_completeopt() abort
   " Auto completion conflicts with 'completeopt'.
-  set completeopt-=longest
-  set completeopt+=menuone
-  set completeopt-=menu
+  setlocal completeopt-=longest
+  setlocal completeopt+=menuone
+  setlocal completeopt-=menu
 
-  if &completeopt !~# 'noinsert\|noselect'
-    set completeopt-=noinsert
-    set completeopt+=noselect
+  if &l:completeopt !~# 'noinsert\|noselect'
+    setlocal completeopt-=noinsert
+    setlocal completeopt+=noselect
   endif
 endfunction
 
 function s:restore_completeopt() abort
   if 's:save_completeopt'->exists()
     " Restore completeopt
-    let &completeopt = s:save_completeopt
+    let &l:completeopt = s:save_completeopt
     unlet s:save_completeopt
   endif
 endfunction
