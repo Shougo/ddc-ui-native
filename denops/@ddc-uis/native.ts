@@ -2,15 +2,13 @@ import {
   Context,
   DdcItem,
   DdcOptions,
-} from "https://deno.land/x/ddc_vim@v5.0.0/types.ts";
-import { BaseUi } from "https://deno.land/x/ddc_vim@v5.0.0/base/ui.ts";
-import {
-  autocmd,
   Denops,
-  fn,
-  op,
-  vars,
-} from "https://deno.land/x/ddc_vim@v5.0.0/deps.ts";
+} from "jsr:@shougo/ddc-vim@6.0.0/types";
+import { BaseUi } from "jsr:@shougo/ddc-vim@6.0.0/ui";
+import * as fn from "jsr:@denops/std@7.0.0/function";
+import * as autocmd from "jsr:@denops/std@7.0.0/autocmd";
+import * as op from "jsr:@denops/std@7.0.0/option";
+import * as vars from "jsr:@denops/std@7.0.0/variable";
 
 export type Params = {
   insert: boolean;
