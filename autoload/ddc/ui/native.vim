@@ -20,7 +20,7 @@ function ddc#ui#native#_show(event, overwrite, insert, pos, items) abort
 endfunction
 
 function ddc#ui#native#_hide() abort
-  if mode() ==# 'i'
+  if mode() ==# 'i' && &l:modifiable
     call complete(1, [])
   endif
 
