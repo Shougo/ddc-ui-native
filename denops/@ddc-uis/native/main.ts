@@ -57,26 +57,24 @@ export class Ui extends BaseUi<Params> {
     // Note: re-indentation does not work for native popupmenu
     const indentkeys = (await op.indentkeys.getLocal(args.denops)).split(",");
     const mode = await fn.mode(args.denops);
-    if (
-      mode == "i" &&
-      indentkeys.filter((pattern) => pattern == "!^F").length > 0
-    ) {
+    const hasIndentKick = indentkeys.includes("!^F");
+    const headIndentPatterns = indentkeys
+      .map((pattern) => pattern.match(/^0?=~?(.+)$/))
+      .filter((pattern): pattern is RegExpMatchArray => pattern !== null);
+
+    if (mode == "i" && hasIndentKick && headIndentPatterns.length > 0) {
       const checkInput = args.context.input.replace(/^\s+/, "");
-      for (
-        const found of indentkeys.map((p) => p.match(/^0?=~?(.+)$/))
-      ) {
-        if (!found) {
-          continue;
-        }
+      for (const found of headIndentPatterns) {
+        const isHeadMatch = found[0][0] == "0";
+        const pattern = found[1];
 
         // Skip completion and reindent if matched.
         // NOTE: fn.feedkeys(args.denops, "\<C-f>", "n") does not work
-        const checkHead = found[0][0] == "0";
-        if (checkHead && checkInput == found[1]) {
+        if (isHeadMatch && checkInput == pattern) {
           await args.denops.call("ddc#ui#native#_indent_current_line");
           return;
         }
-        if (!checkHead && checkInput.endsWith(found[1])) {
+        if (!isHeadMatch && checkInput.endsWith(pattern)) {
           await args.denops.call("ddc#ui#native#_indent_current_line");
           return;
         }
@@ -84,14 +82,12 @@ export class Ui extends BaseUi<Params> {
     }
 
     // Convert to native items
-    const items = args.items.map((item) => (
-      {
-        ...item,
-        dup: true,
-        equal: true,
-        icase: true,
-      }
-    ));
+    const items = args.items.map((item) => ({
+      ...item,
+      dup: true,
+      equal: true,
+      icase: true,
+    }));
 
     await args.denops.call(
       "ddc#ui#native#_show",
